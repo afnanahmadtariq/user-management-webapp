@@ -23,7 +23,6 @@ function isAuthenticated() {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    echo " a giya post";
     $action = $_POST['action'];
 
     if ($action === 'login') {
@@ -64,7 +63,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo json_encode(['status' => 'success', 'message' => 'User deleted successfully']);
     }
 } elseif ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    echo " a giya get";
     echo json_encode($users);
 }
 ?>
