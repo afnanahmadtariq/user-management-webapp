@@ -6,6 +6,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const userTableBody = document.getElementById('userTableBody');
     const loginForm = document.getElementById('loginForm');
     const signupForm = document.getElementById('signupForm');
+    const addUserForm = document.getElementById('addUserForm');
+    const updateUserForm = document.getElementById('updateUserForm');
+
+    let currentUpdateEmail = null; // To store email during the update process
 
     const isLoggedIn = () => localStorage.getItem('token') !== null;
 
@@ -24,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const fetchUsers = async () => {
-        const response = await fetch('index.php');
+        const response = await fetch('server.php');
         const users = await response.json();
         userTableBody.innerHTML = users.map(user => `
             <tr>
@@ -32,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td>${user.email}</td>
                 <td>
                     ${isLoggedIn() ? `
-                        <button class="btn btn-warning btn-sm" onclick="updateUser('${user.email}')">Update</button>
+                        <button class="btn btn-warning btn-sm" onclick="openUpdateUser('${user.email}', '${user.name}')">Update</button>
                         <button class="btn btn-danger btn-sm" onclick="deleteUser('${user.email}')">Delete</button>
                     ` : ''}
                 </td>
@@ -45,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const email = document.getElementById('loginEmail').value;
         const password = document.getElementById('loginPassword').value;
 
-        fetch('index.php', {
+        fetch('server.php', {
             method: 'POST',
             body: new URLSearchParams({ action: 'login', email, password })
         })
@@ -53,11 +57,12 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(data => {
             if (data.status === 'success') {
                 localStorage.setItem('token', data.token);
+                alert('Login successful!');
                 updateUI();
-                $('#loginModal').modal('hide');
                 fetchUsers();
+                document.getElementById('loginModal').querySelector('.btn-close').click();
             } else {
-                alert('Login failed: ' + data.message);
+                alert(data.message);
             }
         });
     });
@@ -67,56 +72,86 @@ document.addEventListener('DOMContentLoaded', () => {
         const name = document.getElementById('signupName').value;
         const email = document.getElementById('signupEmail').value;
         const password = document.getElementById('signupPassword').value;
-
-        fetch('index.php', {
+        fetch('server.php', {
             method: 'POST',
-            body: new URLSearchParams({ action: 'add', name, email, password })
+            body: new URLSearchParams({ action: 'signup', name, email, password })
         })
         .then(res => res.json())
         .then(data => {
+            alert(data.message);
             if (data.status === 'success') {
-                alert('User added!');
-                $('#signupModal').modal('hide');
-            } else {
-                alert('Signup failed: ' + data.message);
+                document.getElementById('signupModal').querySelector('.btn-close').click();
             }
         });
     });
 
+    addUserForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = document.getElementById('addUserName').value;
+        const email = document.getElementById('addUserEmail').value;
+        const password = document.getElementById('addUserPassword').value;
+
+        fetch('server.php', {
+            method: 'POST',
+            body: new URLSearchParams({ action: 'add', name, email, password, token: localStorage.getItem('token') })
+        })
+        .then(res => res.json())
+        .then(data => {
+            alert(data.message);
+            if (data.status === 'success') {
+                fetchUsers();
+                document.getElementById('addUserModal').querySelector('.btn-close').click();
+            }
+        });
+    });
+
+    window.openUpdateUser = (email, name) => {
+        currentUpdateEmail = email;
+        document.getElementById('updateUserName').value = name;
+        const updateModal = new bootstrap.Modal(document.getElementById('updateUserModal'));
+        updateModal.show();
+    };
+
+    updateUserForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = document.getElementById('updateUserName').value;
+
+        fetch('server.php', {
+            method: 'POST',
+            body: new URLSearchParams({ action: 'update', email: currentUpdateEmail, name, token: localStorage.getItem('token') })
+        })
+        .then(res => res.json())
+        .then(data => {
+            alert(data.message);
+            if (data.status === 'success') {
+                fetchUsers();
+                document.getElementById('updateUserModal').querySelector('.btn-close').click();
+            }
+        });
+    });
+
+    window.deleteUser = (email) => {
+        if (confirm('Are you sure you want to delete this user?')) {
+            fetch('server.php', {
+                method: 'POST',
+                body: new URLSearchParams({ action: 'delete', email, token: localStorage.getItem('token') })
+            })
+            .then(res => res.json())
+            .then(data => {
+                alert(data.message);
+                if (data.status === 'success') {
+                    fetchUsers();
+                }
+            });
+        }
+    };
+
     logoutBtn.addEventListener('click', () => {
         localStorage.removeItem('token');
+        alert('Logged out successfully!');
         updateUI();
         fetchUsers();
     });
-
-    const updateUser = (email) => {
-        const name = prompt('Enter new name:');
-        if (name) {
-            fetch('index.php', {
-                method: 'POST',
-                body: new URLSearchParams({ action: 'update', email, name })
-            })
-            .then(res => res.json())
-            .then(data => {
-                alert(data.message);
-                fetchUsers();
-            });
-        }
-    };
-
-    const deleteUser = (email) => {
-        if (confirm('Are you sure you want to delete this user?')) {
-            fetch('index.php', {
-                method: 'POST',
-                body: new URLSearchParams({ action: 'delete', email })
-            })
-            .then(res => res.json())
-            .then(data => {
-                alert(data.message);
-                fetchUsers();
-            });
-        }
-    };
 
     updateUI();
     fetchUsers();

@@ -1,17 +1,1 @@
-[
-    {
-        "name": "John Doe",
-        "email": "john.doe@example.com",
-        "password": "password123"
-    },
-    {
-        "name": "Jane Smith",
-        "email": "jane.smith@example.com",
-        "password": "securepassword"
-    },
-    {
-        "name": "Alice Johnson",
-        "email": "alice.johnson@example.com",
-        "password": "mypassword"
-    }
-]
+[{"name":"Jane Smith","email":"jane.smith@example.com","password":"$2y$10$abcdefghijklmnopqrstuv1234567890"},{"name":"Bob Johnson","email":"bob.johnson@example.com","password":"$2y$10$abcdefghijklmnopqrstuv1234567890"},{"name":"USER34","email":"sniperwdawstoehacker@gmail.com","password":"$2y$10$hare9P1zsDwzWpmFaeENQO583ixNABbm2tiA\/dGLU0ZQ5I\/Du9KN6"}]
