@@ -1,1 +1,27 @@
-[{"name":"Jane Smith","email":"jane.smith@example.com","password":"$2y$10$abcdefghijklmnopqrstuv1234567890"},{"name":"Bob Johnson","email":"bob.johnson@example.com","password":"$2y$10$abcdefghijklmnopqrstuv1234567890"},{"name":"USER34","email":"sniperwdawstoehacker@gmail.com","password":"$2y$10$hare9P1zsDwzWpmFaeENQO583ixNABbm2tiA\/dGLU0ZQ5I\/Du9KN6"}]
+[
+  {
+    "name": "adwa",
+    "email": "bob.johnson@example.com",
+    "password": "$2y$10$abcdefghijklmnopqrstuv1234567890"
+  },
+  {
+    "name": "as",
+    "email": "aasdas@gmail.com",
+    "password": "$2y$10$ahOjxKHmEpa55pHeOF9y8OdVa5i2DUh5YAY1bsmWftFj1848mk7si"
+  },
+  {
+    "name": "USER34",
+    "email": "sniperstoehacker@gmail.com",
+    "password": "$2y$10$CnMrFBDkolMSn/9azZf0QefmO0EtEmKHiYFmYO6b92BJHybjJHYh6"
+  },
+  {
+    "name": "USER34",
+    "email": "aasdas@gmail.com",
+    "password": "$2y$10$iDGwA6L4Toqv.GBp8xYJWuPqrE0n4HNZ92HwM.Wfc2FfNu21lTfeS"
+  },
+  {
+    "name": "asdwa",
+    "email": "asd@gmail.com",
+    "password": "$2y$10$OGWj.BaAYaEMplx5lB.KEuPWoZ2sSxPDoXqfDh4Ynb0kSTfMNIcpS"
+  }
+]
